@@ -93,4 +93,13 @@ public class Utente implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "utenteId=" + utenteId +
+                ", email='" + email + '\'' +
+                ", ruolo=" + ruolo +
+                '}';
+    }
 }
