@@ -8,6 +8,7 @@ public record EventoResponse(Long eventoId,
                              LocalDateTime dataEvento,
                              String luogo,
                              Integer numeroPostiTotali,
+                             Integer postiDisponibili,
                              Long organizzatoreId,
                              String organizzatoreEmail) {
 }

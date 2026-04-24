@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "eventi")
@@ -42,6 +44,9 @@ public class Evento {
     @Positive(message = "Il numero di posti totali deve essere maggiore di zero")
     @Column(name = "numero_posti_totali", nullable = false)
     private Integer numeroPostiTotali;
+
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Prenotazione> prenotazioni = new ArrayList<>();
 
     public Evento(Utente organizzatore, String titolo, String descrizione, LocalDateTime dataEvento, String luogo, Integer numeroPostiTotali) {
         this.organizzatore = organizzatore;

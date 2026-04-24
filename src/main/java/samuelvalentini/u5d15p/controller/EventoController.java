@@ -26,6 +26,11 @@ public class EventoController {
         return eventoService.findAll();
     }
 
+    @GetMapping("/prenotabili")
+    public List<EventoResponse> getEventiPrenotabili() {
+        return eventoService.findEventiPrenotabili();
+    }
+
     @GetMapping("/{eventoId}")
     public EventoResponse getEventoById(@PathVariable Long eventoId) {
         return eventoService.findByIdResponse(eventoId);
@@ -57,4 +62,6 @@ public class EventoController {
     ) {
         eventoService.delete(eventoId, currentUser);
     }
+
+
 }

@@ -9,6 +9,7 @@ import samuelvalentini.u5d15p.enumeration.Ruolo;
 import samuelvalentini.u5d15p.exception.NotFoundException;
 import samuelvalentini.u5d15p.exception.UnauthorizedException;
 import samuelvalentini.u5d15p.repository.EventoRepository;
+import samuelvalentini.u5d15p.repository.PrenotazioneRepository;
 
 import java.util.List;
 
@@ -17,13 +18,23 @@ import java.util.List;
 public class EventoService {
 
     private final EventoRepository eventoRepository;
+    //devo iniettare PrenotazioneRepository e non PrenotazioneService per evitare un riferimento circolare
+    private final PrenotazioneRepository prenotazioneRepository;
 
-    public EventoService(EventoRepository eventoRepository) {
+    public EventoService(EventoRepository eventoRepository, PrenotazioneRepository prenotazioneRepository) {
         this.eventoRepository = eventoRepository;
+        this.prenotazioneRepository = prenotazioneRepository;
     }
 
     public List<EventoResponse> findAll() {
         return eventoRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    public List<EventoResponse> findEventiPrenotabili() {
+        return eventoRepository.findEventiPrenotabili()
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -91,6 +102,9 @@ public class EventoService {
     }
 
     private EventoResponse toResponse(Evento evento) {
+        long prenotazioniEffettuate = prenotazioneRepository.countByEvento(evento);
+        int postiDisponibili = evento.getNumeroPostiTotali() - (int) prenotazioniEffettuate;
+
         return new EventoResponse(
                 evento.getEventoId(),
                 evento.getTitolo(),
@@ -98,6 +112,7 @@ public class EventoService {
                 evento.getDataEvento(),
                 evento.getLuogo(),
                 evento.getNumeroPostiTotali(),
+                postiDisponibili,
                 evento.getOrganizzatore().getUtenteId(),
                 evento.getOrganizzatore().getEmail()
         );
