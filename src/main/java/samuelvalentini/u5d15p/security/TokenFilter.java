@@ -12,6 +12,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import samuelvalentini.u5d15p.entity.Utente;
 import samuelvalentini.u5d15p.exception.UnauthorizedException;
+import samuelvalentini.u5d15p.service.UtenteService;
 
 
 import java.io.IOException;
