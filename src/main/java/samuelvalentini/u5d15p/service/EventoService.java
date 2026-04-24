@@ -6,6 +6,7 @@ import samuelvalentini.u5d15p.dto.EventoResponse;
 import samuelvalentini.u5d15p.entity.Evento;
 import samuelvalentini.u5d15p.entity.Utente;
 import samuelvalentini.u5d15p.enumeration.Ruolo;
+import samuelvalentini.u5d15p.exception.BadRequestException;
 import samuelvalentini.u5d15p.exception.ForbiddenException;
 import samuelvalentini.u5d15p.exception.NotFoundException;
 
@@ -68,6 +69,12 @@ public class EventoService {
         Evento found = findById(eventoId);
 
         checkProprietarioEvento(found, organizzatore);
+
+        long prenotazioniEffettuate = prenotazioneRepository.countByEvento(found);
+
+        if (eventoRequest.numeroPostiTotali() < prenotazioniEffettuate) {
+            throw new BadRequestException("Non puoi impostare un numero di posti inferiore alle prenotazioni già effettuate");
+        }
 
         found.setTitolo(eventoRequest.titolo());
         found.setDescrizione(eventoRequest.descrizione());
