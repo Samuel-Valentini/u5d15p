@@ -40,6 +40,12 @@ public class ErrorHandler {
         return new ErrorPayload(ex.getMessage(), LocalDateTime.now());
     }
 
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorPayload handleForbidden(ForbiddenException ex) {
+        return new ErrorPayload(ex.getMessage(), LocalDateTime.now());
+    }
+
     @ExceptionHandler(HandlerMethodValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorPayload handleBadRequest(HandlerMethodValidationException ex) {

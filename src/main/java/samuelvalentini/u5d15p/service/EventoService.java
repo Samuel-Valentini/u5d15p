@@ -6,8 +6,9 @@ import samuelvalentini.u5d15p.dto.EventoResponse;
 import samuelvalentini.u5d15p.entity.Evento;
 import samuelvalentini.u5d15p.entity.Utente;
 import samuelvalentini.u5d15p.enumeration.Ruolo;
+import samuelvalentini.u5d15p.exception.ForbiddenException;
 import samuelvalentini.u5d15p.exception.NotFoundException;
-import samuelvalentini.u5d15p.exception.UnauthorizedException;
+
 import samuelvalentini.u5d15p.repository.EventoRepository;
 import samuelvalentini.u5d15p.repository.PrenotazioneRepository;
 
@@ -91,13 +92,13 @@ public class EventoService {
 
     private void checkOrganizzatore(Utente utente) {
         if (utente.getRuolo() != Ruolo.ORGANIZZATORE) {
-            throw new UnauthorizedException("Solo gli organizzatori possono gestire eventi");
+            throw new ForbiddenException("Solo gli organizzatori possono gestire eventi");
         }
     }
 
     private void checkProprietarioEvento(Evento evento, Utente utente) {
         if (!evento.getOrganizzatore().getUtenteId().equals(utente.getUtenteId())) {
-            throw new UnauthorizedException("Puoi modificare o eliminare solo i tuoi eventi");
+            throw new ForbiddenException("Puoi modificare o eliminare solo i tuoi eventi");
         }
     }
 

@@ -6,8 +6,9 @@ import samuelvalentini.u5d15p.entity.Evento;
 import samuelvalentini.u5d15p.entity.Prenotazione;
 import samuelvalentini.u5d15p.entity.Utente;
 import samuelvalentini.u5d15p.exception.BadRequestException;
+import samuelvalentini.u5d15p.exception.ForbiddenException;
 import samuelvalentini.u5d15p.exception.NotFoundException;
-import samuelvalentini.u5d15p.exception.UnauthorizedException;
+
 import samuelvalentini.u5d15p.repository.PrenotazioneRepository;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class PrenotazioneService {
         Prenotazione prenotazione = findById(prenotazioneId);
 
         if (!prenotazione.getUtente().getUtenteId().equals(utente.getUtenteId())) {
-            throw new UnauthorizedException("Puoi annullare solo le tue prenotazioni");
+            throw new ForbiddenException("Puoi annullare solo le tue prenotazioni");
         }
 
         prenotazioneRepository.delete(prenotazione);
