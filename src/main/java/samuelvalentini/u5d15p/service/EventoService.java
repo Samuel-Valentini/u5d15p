@@ -55,8 +55,7 @@ public class EventoService {
     public EventoResponse save(EventoRequest eventoRequest, Utente organizzatore) {
         checkOrganizzatore(organizzatore);
 
-        Evento nuovoEvento = new Evento(organizzatore, eventoRequest.titolo(), eventoRequest.descrizione(), eventoRequest.dataEvento(), eventoRequest.luogo(), eventoRequest.numeroPostiTotali()
-        );
+        Evento nuovoEvento = new Evento(organizzatore, eventoRequest.titolo(), eventoRequest.descrizione(), eventoRequest.dataEvento(), eventoRequest.luogo(), eventoRequest.numeroPostiTotali());
 
         Evento savedEvento = eventoRepository.save(nuovoEvento);
 
