@@ -11,6 +11,7 @@ import samuelvalentini.u5d15p.exception.NotFoundException;
 
 import samuelvalentini.u5d15p.repository.PrenotazioneRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,6 +28,10 @@ public class PrenotazioneService {
     @Transactional
     public Prenotazione prenotaEvento(Long eventoId, Utente utente) {
         Evento evento = eventoService.findById(eventoId);
+
+        if (evento.getDataEvento().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("Non puoi prenotare un evento già passato");
+        }
 
         if (prenotazioneRepository.existsByUtenteAndEvento(utente, evento)) {
             throw new BadRequestException("Hai già prenotato un posto per questo evento");
@@ -54,6 +59,11 @@ public class PrenotazioneService {
 
     public void annullaPrenotazione(Long prenotazioneId, Utente utente) {
         Prenotazione prenotazione = findById(prenotazioneId);
+
+
+        if (prenotazione.getEvento().getDataEvento().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("Non puoi cancellare una prenotazione di un evento già passato");
+        }
 
         if (!prenotazione.getUtente().getUtenteId().equals(utente.getUtenteId())) {
             throw new ForbiddenException("Puoi annullare solo le tue prenotazioni");
